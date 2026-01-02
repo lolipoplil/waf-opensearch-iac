@@ -22,14 +22,7 @@ pipeline {
 
         stage('Deploy Infrastructure') {
             steps {
-                sh '''
-                    ansible-playbook \
-                      -i inventory/production \
-                      playbooks/site.yml \
-                      --user jenka \
-                      --private-key ~/.ssh/id_ed25519 \
-                      -vv
-                '''
+                sh 'ansible-playbook playbooks/site.yml -vv'
             }
         }
     }
