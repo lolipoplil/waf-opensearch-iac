@@ -1,3 +1,4 @@
+sudo tee /etc/systemd/system/nginx.service <<'EOF'
 [Unit]
 Description=The NGINX HTTP and reverse proxy server
 After=network.target remote-fs.target nss-lookup.target
@@ -15,3 +16,4 @@ PrivateTmp=true
 
 [Install]
 WantedBy=multi-user.target
+EOF
