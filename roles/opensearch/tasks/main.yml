@@ -1,0 +1,56 @@
+#SPDX-License-Identifier: MIT-0
+---
+# tasks file for roles/opensearch
+---
+- name: Install Java 21
+  dnf:
+    name: java-21-openjdk
+    state: present
+
+- name: Add OpenSearch GPG key
+  rpm_key:
+    key: https://artifacts.opensearch.org/publickeys/opensearch.pgp
+    state: present
+
+- name: Add OpenSearch repo
+  yum_repository:
+    name: opensearch
+    baseurl: https://artifacts.opensearch.org/releases/bundle/opensearch/2.x/yum/
+    gpgcheck: yes
+    gpgkey: https://artifacts.opensearch.org/publickeys/opensearch.pgp
+
+- name: Install OpenSearch
+  dnf:
+    name: opensearch
+    state: present
+
+- name: Configure opensearch.yml
+  template:
+    src: templates/opensearch.yml.j2
+    dest: /etc/opensearch/opensearch.yml
+
+- name: Disable security plugin (demo only)
+  lineinfile:
+    path: /etc/opensearch/opensearch.yml
+    line: "plugins.security.disabled: true"
+    create: no
+
+- name: Open ports in firewall
+  firewalld:
+    port: "{{ item }}/tcp"
+    permanent: yes
+    state: enabled
+  loop:
+    - 9200
+    - 9600
+
+- name: Reload firewall
+  systemd:
+    name: firewalld
+    state: reloaded
+
+- name: Start and enable OpenSearch
+  systemd:
+    name: opensearch
+    state: started
+    enabled: yes

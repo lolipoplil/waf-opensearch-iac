@@ -1,0 +1,11 @@
+filebeat.inputs:
+- type: filestream
+  enabled: true
+  paths:
+    - {{ modsec_audit_log }}
+  json.keys_under_root: true
+  json.add_error_key: true
+
+output.opensearch:
+  hosts: ["http://{{ opensearch_host }}:{{ opensearch_port }}"]
+  index: "waf-logs-%{+yyyy.MM.dd}"

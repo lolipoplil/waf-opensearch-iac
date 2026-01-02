@@ -1,0 +1,31 @@
+#SPDX-License-Identifier: MIT-0
+---
+# tasks file for roles/common
+---
+- name: Update system
+  dnf:
+    name: "*"
+    state: latest
+    update_cache: yes
+
+- name: Install common packages
+  dnf:
+    name:
+      - git
+      - curl
+      - wget
+      - vim
+      - bash-completion
+    state: present
+
+- name: Disable SELinux (temporarily)
+  selinux:
+    state: disabled
+  when: ansible_selinux.status is defined
+
+- name: Ensure SSH key-based auth works
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^PasswordAuthentication'
+    line: 'PasswordAuthentication no'
+  notify: restart sshd

@@ -1,0 +1,19 @@
+---
+- name: Deploy CI/CD and target app
+  hosts: cicd
+  roles:
+    - common
+    - nginx_target
+
+- name: Deploy WAF
+  hosts: waf
+  roles:
+    - common
+    - waf
+    - filebeat
+
+- name: Deploy OpenSearch
+  hosts: opensearch
+  roles:
+    - common
+    - opensearch
