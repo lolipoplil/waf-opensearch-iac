@@ -26,7 +26,7 @@ pipeline {
                     ansible-playbook \
                       -i inventory/production \
                       playbooks/site.yml \
-                      --user jenkins \
+                      --user jenka \
                       --private-key ~/.ssh/id_ed25519 \
                       -vv
                 '''
