@@ -15,10 +15,16 @@
       - bash-completion
     state: present
 
-- name: Disable SELinux (temporarily)
-  selinux:
-    state: disabled
-  when: ansible_selinux.status is defined
+#- name: Disable SELinux (temporarily)
+# selinux:
+#    state: disabled
+#  when: ansible_selinux.status is defined
+
+- name: Disable SELinux (via shell)
+  shell: |
+    setenforce 0
+    sed -i 's/^SELINUX=.*/SELINUX=disabled/' /etc/selinux/config
+  ignore_errors: yes
 
 - name: Ensure SSH key-based auth works
   lineinfile:
