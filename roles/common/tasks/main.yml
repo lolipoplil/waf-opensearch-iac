@@ -1,9 +1,21 @@
 ---
-- name: Update system
+#- name: Update system
+#  dnf:
+#    name: "*"
+#    state: latest
+#    update_cache: yes
+
+- name: Refresh dnf cache
   dnf:
-    name: "*"
-    state: latest
     update_cache: yes
+    name: "dummy"  # фиктивный пакет, чтобы не обновлять всё
+  changed_when: false
+
+- name: Upgrade all packages (may take a while)
+  command: dnf -y upgrade --refresh
+  args:
+    warn: false
+  changed_when: false
 
 - name: Install common packages
   dnf:
