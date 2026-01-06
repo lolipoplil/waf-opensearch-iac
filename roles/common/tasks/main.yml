@@ -8,7 +8,7 @@
 - name: Refresh dnf cache
   dnf:
     update_cache: yes
-    name: "dummy"  # фиктивный пакет, чтобы не обновлять всё
+    name: "dummy"
   changed_when: false
 
 - name: Upgrade all packages (may take a while)
