@@ -1,12 +1,14 @@
 ---
 - name: Deploy CI/CD and target app
   hosts: cicd
+  become: yes
   roles:
     - common
     - nginx_target
 
 - name: Deploy WAF
   hosts: waf
+  become: yes
   roles:
     - common
     - waf
@@ -14,6 +16,7 @@
 
 - name: Deploy OpenSearch
   hosts: opensearch
+  become: yes
   roles:
     - common
     - opensearch
