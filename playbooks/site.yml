@@ -10,7 +10,7 @@
   hosts: waf
   become: yes
   vars:
-    target_server: "{{ hostvars['cicd.example.local']['target_server'] }}"
+    target_server: "{{ target_server }}"
   roles:
     - common
     - waf
