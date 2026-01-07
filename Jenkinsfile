@@ -20,15 +20,15 @@ pipeline {
             }
         }
 
-        stage('Deploy Infrastructure') {
-            steps {
-                sh 'ansible-playbook playbooks/site.yml -vv'
-            }
-        }
-
         stage('Install Ansible Collections') {
             steps {
                 sh 'ansible-galaxy collection install -r requirements.yml --force'
+            }
+        }
+        
+        stage('Deploy Infrastructure') {
+            steps {
+                sh 'ansible-playbook playbooks/site.yml -vv'
             }
         }
     }
