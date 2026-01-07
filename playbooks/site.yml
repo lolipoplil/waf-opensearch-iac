@@ -12,7 +12,7 @@
   roles:
     - common
     - waf
-    - filebeat
+    - fluent-bit
 
 - name: Deploy OpenSearch
   hosts: opensearch
