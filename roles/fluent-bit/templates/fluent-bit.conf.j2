@@ -1,0 +1,21 @@
+[SERVICE]
+    Flush        1
+    Log_Level    info
+    Parsers_File parsers.conf
+
+[INPUT]
+    Name         tail
+    Path         {{ modsec_audit_log }}
+    Tag          waf.logs
+    Parser       json
+    Mem_Buf_Limit 5MB
+
+[OUTPUT]
+    Name            opensearch
+    Match           waf.logs
+    Host            {{ opensearch_host }}
+    Port            {{ opensearch_port }}
+    Index           waf-logs-%Y.%m.%d
+    Type            _doc
+    TLS             Off
+    Suppress_Type_Name On
