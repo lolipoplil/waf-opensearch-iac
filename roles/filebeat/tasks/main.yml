@@ -4,14 +4,20 @@
     key: https://artifacts.elastic.co/GPG-KEY-elasticsearch
     state: present
 
-- name: Add Elastic repo
-  community.general.dnf_repository:
-    name: elastic-8.x
-    description: Elastic repository for 8.x packages
-    baseurl: https://artifacts.elastic.co/packages/8.x/yum
-    gpgcheck: yes
-    gpgkey: https://artifacts.elastic.co/GPG-KEY-elasticsearch
-    enabled: yes
+- name: Add Elastic repo (via ini_file)
+  ini_file:
+    path: /etc/yum.repos.d/elastic-8.x.repo
+    section: elastic-8.x
+    option: "{{ item.option }}"
+    value: "{{ item.value }}"
+    mode: '0644'
+  loop:
+    - { option: name, value: "Elastic repository for 8.x packages" }
+    - { option: baseurl, value: "https://artifacts.elastic.co/packages/8.x/yum" }
+    - { option: gpgcheck, value: "1" }
+    - { option: gpgkey, value: "https://artifacts.elastic.co/GPG-KEY-elasticsearch" }
+    - { option: enabled, value: "1" }
+  become: yes
 
 - name: Install Filebeat
   dnf:
