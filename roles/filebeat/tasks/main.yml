@@ -5,7 +5,7 @@
     state: present
 
 - name: Add Elastic repo
-  dnf_repository:
+  community.general.dnf_repository:
     name: elastic-8.x
     description: Elastic repository for 8.x packages
     baseurl: https://artifacts.elastic.co/packages/8.x/yum
