@@ -10,11 +10,13 @@
     state: present
 
 - name: Add OpenSearch repo
-  yum_repository:
+  dnf_repository:
     name: opensearch
+    description: OpenSearch repository for 2.x packages
     baseurl: https://artifacts.opensearch.org/releases/bundle/opensearch/2.x/yum/
     gpgcheck: yes
     gpgkey: https://artifacts.opensearch.org/publickeys/opensearch.pgp
+    enabled: yes
 
 - name: Install OpenSearch
   dnf:
