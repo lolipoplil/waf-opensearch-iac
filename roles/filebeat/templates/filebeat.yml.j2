@@ -11,7 +11,8 @@ output.elasticsearch:
   hosts: ["http://{{ opensearch_host }}:{{ opensearch_port }}"]
   index: "waf-logs-%{+yyyy.MM.dd}"
   allow_older_versions: true
-
+  parameters.version: "7.10.2"
+  
 setup.template.name: "waf-logs"
 setup.template.pattern: "waf-logs-*"
 setup.template.enabled: false
