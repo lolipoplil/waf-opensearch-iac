@@ -1,3 +1,5 @@
-#SPDX-License-Identifier: MIT-0
 ---
-# handlers file for roles/fluent-bit
+- name: restart fluent-bit
+  systemd:
+    name: fluent-bit
+    state: restarted
