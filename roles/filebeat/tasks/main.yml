@@ -5,11 +5,13 @@
     state: present
 
 - name: Add Elastic repo
-  yum_repository:
+  dnf_repository:
     name: elastic-8.x
+    description: Elastic repository for 8.x packages
     baseurl: https://artifacts.elastic.co/packages/8.x/yum
     gpgcheck: yes
     gpgkey: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+    enabled: yes
 
 - name: Install Filebeat
   dnf:
