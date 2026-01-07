@@ -1,0 +1,27 @@
+- name: Add Fluent-bit repository
+  copy:
+    dest: /etc/yum.repos.d/fluent-bit.repo
+    content: |
+      [fluent-bit]
+      name = Fluent Bit
+      baseurl = https://packages.fluentbit.io/fedora/$releasever/
+      gpgcheck = 1
+      gpgkey = https://packages.fluentbit.io/fluentbit.key
+      enabled = 1
+
+- name: Install Fluent-bit
+  dnf:
+    name: fluent-bit
+    state: present
+
+- name: Configure Fluent-bit
+  template:
+    src: fluent-bit.conf.j2
+    dest: /etc/fluent-bit/fluent-bit.conf
+  notify: restart fluent-bit
+
+- name: Ensure Fluent-bit is started
+  systemd:
+    name: fluent-bit
+    enabled: yes
+    state: started
