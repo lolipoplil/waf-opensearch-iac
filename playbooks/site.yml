@@ -9,8 +9,6 @@
 - name: Deploy WAF
   hosts: waf
   become: yes
-  vars:
-    target_server: "{{ target_server }}"
   roles:
     - common
     - waf
