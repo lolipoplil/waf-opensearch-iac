@@ -1,3 +1,5 @@
 ---
-- name: reload nginx waf
-  command: /usr/local/nginx/sbin/nginx -s reload
+- name: reload nginx
+  systemd:
+    name: nginx
+    state: reloaded
