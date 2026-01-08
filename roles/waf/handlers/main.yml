@@ -1,3 +1,0 @@
----
-- name: reload nginx waf
-  command: /usr/local/nginx/sbin/nginx -s reload
