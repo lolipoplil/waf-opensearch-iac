@@ -100,8 +100,3 @@
     src: custom_dos.conf
     dest: /etc/nginx/modsecurity/rules/custom_dos.conf
   notify: reload nginx
-
-- name: Include custom rules in main config
-  lineinfile:
-    path: /etc/nginx/modsecurity/modsecurity.conf
-    line: "Include /etc/nginx/modsecurity/rules/custom_dos.conf"
