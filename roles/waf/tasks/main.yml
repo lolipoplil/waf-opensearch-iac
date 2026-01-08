@@ -94,3 +94,14 @@
     src: templates/nginx.conf.j2
     dest: /usr/local/nginx/conf/nginx.conf
   notify: reload nginx waf
+
+- name: Copy custom DoS rules
+  copy:
+    src: custom_dos.conf
+    dest: /etc/nginx/modsecurity/rules/custom_dos.conf
+  notify: reload nginx
+
+- name: Include custom rules in main config
+  lineinfile:
+    path: /etc/nginx/modsecurity/modsecurity.conf
+    line: "Include /etc/nginx/modsecurity/rules/custom_dos.conf"
