@@ -5,6 +5,7 @@ SecResponseBodyMimeType text/plain text/html text/xml application/json
 SecDataDir /tmp
 Include /etc/nginx/modsecurity/crs-setup.conf
 Include /etc/nginx/modsecurity/rules/*.conf
+Include /etc/nginx/modsecurity/rules/custom_dos.conf
 SecAuditEngine RelevantOnly
 SecAuditLogRelevantStatus "^(?:5|4(?!04))"
 SecAuditLogParts ABCDEFGHIJKZ
