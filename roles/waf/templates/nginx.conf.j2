@@ -16,6 +16,7 @@ http {
 
     modsecurity on;
     modsecurity_rules_file /etc/nginx/modsecurity/modsecurity.conf;
+    limit_req_zone $binary_remote_addr zone=dos_limit:10m rate=10r/s;
 
     server {
         listen 80;
@@ -25,5 +26,6 @@ http {
             proxy_set_header X-Real-IP $remote_addr;
             proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         }
+        limit_req zone=dos_limit burst=20 nodelay;
     }
 }
