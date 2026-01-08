@@ -1,0 +1,107 @@
+---
+- name: Install build dependencies
+  dnf:
+    name:
+      - gcc-c++
+      - flex
+      - bison
+      - yajl-devel
+      - curl-devel
+      - GeoIP-devel
+      - lmdb-devel
+      - ssdeep-devel
+      - lua-devel
+      - libmaxminddb-devel
+      - pcre-devel
+      - zlib-devel
+      - openssl-devel
+      - libxml2-devel
+      - make
+      - git
+    state: present
+
+- name: Clone and build ModSecurity v3
+  shell: |
+    cd /tmp
+    git clone --depth 1 -b v3/master https://github.com/SpiderLabs/ModSecurity.git
+    cd ModSecurity
+    git submodule init
+    git submodule update
+    sh build.sh
+    ./configure
+    make -j$(nproc)
+    make install
+  args:
+    creates: /usr/local/modsecurity
+
+- name: Run ldconfig
+  command: ldconfig
+
+- name: Clone ModSecurity-nginx connector
+  git:
+    repo: https://github.com/SpiderLabs/ModSecurity-nginx.git
+    dest: /tmp/ModSecurity-nginx
+    clone: yes
+    update: no
+
+- name: Download and build Nginx with ModSecurity
+  shell: |
+    cd /tmp
+    NGINX_VERSION=$(curl -s https://nginx.org/en/download.html | grep 'stable version' | grep -oE 'nginx-[0-9.]+\.tar.gz' | head -1 | sed 's/.tar.gz//')
+    wget -q https://nginx.org/download/${NGINX_VERSION}.tar.gz
+    tar -xzf ${NGINX_VERSION}.tar.gz
+    cd ${NGINX_VERSION}
+    ./configure --add-module=/tmp/ModSecurity-nginx --with-http_ssl_module --with-http_realip_module
+    make -j$(nproc)
+    make install
+  args:
+    creates: /usr/local/nginx/sbin/nginx
+
+- name: Deploy systemd service for Nginx
+  copy:
+    src: files/nginx.service
+    dest: /etc/systemd/system/nginx.service
+
+- name: Reload systemd
+  systemd:
+    daemon_reload: yes
+
+- name: Start and enable Nginx
+  systemd:
+    name: nginx
+    state: started
+    enabled: yes
+
+- name: Create ModSecurity config dir
+  file:
+    path: /etc/nginx/modsecurity
+    state: directory
+
+- name: Download OWASP CRS
+  unarchive:
+    src: https://github.com/coreruleset/coreruleset/archive/refs/tags/v4.10.0.tar.gz
+    dest: /etc/nginx/modsecurity
+    remote_src: yes
+    extra_opts: [--strip-components=1]
+
+- name: Deploy ModSecurity main config
+  template:
+    src: templates/modsecurity.conf.j2
+    dest: /etc/nginx/modsecurity/modsecurity.conf
+
+- name: Deploy Nginx config with reverse proxy
+  template:
+    src: templates/nginx.conf.j2
+    dest: /usr/local/nginx/conf/nginx.conf
+  notify: reload nginx waf
+
+- name: Copy custom DoS rules
+  copy:
+    src: custom_dos.conf
+    dest: /etc/nginx/modsecurity/rules/custom_dos.conf
+  notify: reload nginx
+
+- name: Include custom rules in main config
+  lineinfile:
+    path: /etc/nginx/modsecurity/modsecurity.conf
+    line: "Include /etc/nginx/modsecurity/rules/custom_dos.conf"
