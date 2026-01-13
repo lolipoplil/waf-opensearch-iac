@@ -17,17 +17,17 @@
 
 📂 Структура проекта
 .
-.├── inventory/               # Список хостов (WAF, OpenSearch)
-.├── roles/                   # Ansible-роли
-.│   ├── common               # Базовая подготовка системы
-.│   ├── waf                  # Установка Nginx + ModSecurity + Правила
-.│   ├── nginx_target         # Установка целевого хоста с Nginx
-.│   ├── opensearch           # Развертывание поискового движка и Dashboards
-.│   └── fluent-bit           # Настройка агента отправки логов
-.├── playbooks/
-.│   └── site.yml             # Главный сценарий развертывания
-.├── Jenkinsfile              # Описание этапов CI/CD пайплайна
-.└── ansible.cfg              # Конфигурация Ansible
+├── inventory/               # Список хостов (WAF, OpenSearch)
+├── roles/                   # Ansible-роли
+│   ├── common               # Базовая подготовка системы
+│   ├── waf                  # Установка Nginx + ModSecurity + Правила
+│   ├── nginx_target         # Установка целевого хоста с Nginx
+│   ├── opensearch           # Развертывание поискового движка и Dashboards
+│   └── fluent-bit           # Настройка агента отправки логов
+├── playbooks/
+│   └── site.yml             # Главный сценарий развертывания
+├── Jenkinsfile              # Описание этапов CI/CD пайплайна
+└── ansible.cfg              # Конфигурация Ansible
 
 🔧 Установка и развертывание
 Предварительные требования
