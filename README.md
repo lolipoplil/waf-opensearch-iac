@@ -16,6 +16,7 @@
 - Automation: Ansible, Jenkins, Git
 
 📂 Структура проекта
+```text
 .
 ├── inventory/               # Список хостов (WAF, OpenSearch)
 ├── roles/                   # Ansible-роли
@@ -28,6 +29,7 @@
 │   └── site.yml             # Главный сценарий развертывания
 ├── Jenkinsfile              # Описание этапов CI/CD пайплайна
 └── ansible.cfg              # Конфигурация Ansible
+```
 
 🔧 Установка и развертывание
 Предварительные требования
